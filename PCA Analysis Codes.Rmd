@@ -1,0 +1,108 @@
+---
+title: "NormToTotalIonAboundances"
+author: "Mona Khorani"
+date: '2023-03-10'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+install.packages("dplyr")
+```
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(magrittr)
+library(readxl)
+library(tidyverse)
+library(openxlsx)
+library(MetaboAnalystR)
+library(qs)
+```
+
+
+*********************************************************************
+***PCA Analysis***
+
+
+#PCA Analysis Raw Data:All groups 
+
+```{r}
+mSet<-InitDataObjects("conc", "stat", FALSE);
+mSet<-Read.TextData(mSet,"135Lipids-NormData_TIA-LogTra.csv","colu","disc")
+mSet<-SanityCheckData(mSet);
+mSet<-ReplaceMin(mSet);
+mSet<-FilterVariable(mSet, "none", "F", 25)
+mSet<-PreparePrenormData(mSet);
+mSet<-Normalization(mSet, "NULL", "NULL", "NULL", ratio=FALSE, ratioNum=20)
+mSet <- PCA.Anal(mSet)
+mSet<-GetGroupNames(mSet, "null")
+colVec<-c("#82345A","#c00000","#B00080","#c71585","#4169E1","#6495ED","#87CEFA","#1E90FF", "#3C1321","#00008B","#006400")
+shapeVec<-c(1,2,3,4,5,6,7,8,9,10,11)
+mSet<-UpdateGraphSettings(mSet, colVec, shapeVec)
+mSet <- PlotPCAPairSummary(mSet, "test", "png", 300, width=NA, 5)
+mSet<- PlotPCAScree(mSet,"pca_scree_0_testl", "png",300, width=NA, 5)
+mSet <- PlotPCA2DScore(mSet, "pca_score2d_0_test", "png", 300, width=NA, 1,2,0.95,1,0)
+mSet <- PlotPCALoading(mSet, "pca_loading_0_test", "png", 300, width=NA, 1,2);
+mSet <- PlotPCABiplot(mSet, "pca_biplot_0_test", "png", 300, width=NA, 1,2)
+mSet <- PlotPCA3DScoreImg(mSet, "pca_score3d_0_test", "png", 300, width=NA, 1,2,3, 40)
+```
+
+
+
+#Raw Data:Only Hip
+#PCA Analysis
+
+```{r}
+mSet2<-InitDataObjects("conc", "stat", FALSE);
+mSet2<-Read.TextData(mSet2,"Hip-135Lipids-NormData_TIA-LogTra.csv","colu","disc")
+mSet2<-SanityCheckData(mSet2);
+mSet2<-ReplaceMin(mSet2);
+mSet2<-FilterVariable(mSet2, "none", "F", 25)
+mSet2<-PreparePrenormData(mSet2);
+mSet2<-Normalization(mSet2, "NULL", "NULL", "NULL", ratio=FALSE, ratioNum=20)
+mSet2 <- PCA.Anal(mSet2)
+mSet2 <- PCA.Anal(mSet2)
+mSet2<-GetGroupNames(mSet2, "null")
+colVec<-c("#4169E1","#6495ED","#87CEFA","#1E90FF","#00008B")
+shapeVec<-c(1,2,3,4,5,6,7,8,9,10,11)
+mSet2<-UpdateGraphSettings(mSet2, colVec, shapeVec)
+mSet2 <- PlotPCAPairSummary(mSet2, "pca_pair_0_RH", "png", 300, width=NA, 5)
+mSet2 <- PlotPCAScree(mSet2, "pca_scree_0_RH", "png",300, width=NA, 5)
+mSet2 <- PlotPCA2DScore(mSet2, "pca_score2d_0_RH", "png", 300, width=NA, 1,2,0.95,1,0)
+mSet2 <- PlotPCALoading(mSet2, "pca_loading_0_RH", "png", 300, width=NA, 1,2);
+mSet2 <- PlotPCABiplot(mSet2, "pca_biplot_0_RH", "png", 300, width=NA, 1,2)
+mSet2 <- PlotPCA3DScoreImg(mSet2, "pca_score3d_0_RH", "png", 300, width=NA, 1,2,3, 40)
+```
+
+
+
+#Raw Data:Only Cortx
+#PCA Analysis
+
+```{r}
+mSet3<-InitDataObjects("msspec", "stat", FALSE);
+mSet3<-Read.TextData(mSet3,"Cortx-135Lipids-NormData_TIA-LogTra.csv","colu","disc")
+mSet3<-SanityCheckData(mSet3);
+mSet3<-ReplaceMin(mSet3);
+mSet3<-FilterVariable(mSet3, "none", "F", 25)
+mSet3<-PreparePrenormData(mSet3);
+mSet3<-Normalization(mSet3, "NULL", "NULL", "NULL", ratio=FALSE, ratioNum=20)
+mSet3 <- PCA.Anal(mSet3)
+mSet3<-GetGroupNames(mSet3, "null")
+colVec<-c("#82345A","#c00000","#B00080","#c71585","#3C1321")
+shapeVec<-c(1,2,3,4,5,6,7,8,9,10,11)
+mSet3<-UpdateGraphSettings(mSet3, colVec, shapeVec)
+mSet3 <- PlotPCAPairSummary(mSet3, "pca_pair_0_RC", "png", 300, width=NA, 5)
+mSet3 <- PlotPCAScree(mSet3, "pca_scree_0_RC", "png",300, width=NA, 5)
+mSet3 <- PlotPCA2DScore(mSet3, "pca_score2d_0_RC", "png", 300, width=NA, 1,2,0.95,1,0)
+mSet3 <- PlotPCALoading(mSet3, "pca_loading_0_RC", "png", 300, width=NA, 1,2);
+mSet3 <- PlotPCABiplot(mSet3, "pca_biplot_0_RC", "png", 300, width=NA, 1,2)
+mSet3 <- PlotPCA3DScoreImg(mSet3, "pca_score3d_0_RC", "png", 300, width=NA, 1,2,3, 40)
+```
+
+
