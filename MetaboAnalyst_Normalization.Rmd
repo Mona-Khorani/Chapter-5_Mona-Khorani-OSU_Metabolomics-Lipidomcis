@@ -1,0 +1,35 @@
+---
+title: "Exp#439_DataAnalysis"
+author: "Mona Khorani"
+date: "1/31/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(MetaboAnalystR)
+library(qs)
+```
+
+```{r}
+mSet<-InitDataObjects("pktable", "stat", FALSE);
+mSet<-Read.TextData(mSet,"135Lipids-NormData_TIA.csv","colu","disc")
+mSet<-SanityCheckData(mSet);
+mSet<-ReplaceMin(mSet);
+mSet<-PreparePrenormData(mSet);
+```
+
+
+#Logtransformation
+```{r}
+mSetN<-Normalization(mSet, rowNorm="Null", transNorm = "LogNorm", scaleNorm =  "Null", ref=NULL, ratio=FALSE);
+Dataset_LogTra_NTIA=mSetN$dataSet
+NormData_LogTra_TIA=Dataset_LogTra_NTIA$norm
+write.csv(NormData_LogTra_TIA, "135Lipids-NormData_TIA-LogTra.csv")
+mSet<-PlotNormSummary(mSetN, "LogTIA-norm_0_", format ="png", dpi=300, width=NA);
+mSet<-PlotSampleNormSummary(mSetN, "Log-tia-snorm_0_", format = "png", dpi=300, width=NA)
+```
+
